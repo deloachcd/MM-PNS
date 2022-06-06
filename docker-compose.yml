@@ -1,0 +1,29 @@
+version: "3"
+services:
+  reverseproxy:
+    image: nginx
+    restart: always
+    volumes:
+      - ./nginx:/etc/nginx
+    # TODO: reverse proxy with nginx
+    # TODO: SSL
+    
+  navidrome:
+    depends_on:
+      - reverseproxy
+    image: deluan/navidrome:latest
+    # TODO: navidrome configuration
+
+  filebrowser:
+    depends_on:
+      - reverseproxy
+    image: filebrowser/filebrowser:latest
+    restart: always
+    # TODO: filebrowser configuration
+
+  samba:
+    image: dperson/samba
+    ports:
+      - 139:139
+      - 445:445
+    # TODO: linux user creds to samba user
