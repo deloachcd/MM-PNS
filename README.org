@@ -1,4 +1,4 @@
-[[https://github.com/deloachcd/img/blob/master/MM-PNS-logo.png?raw=true][MM-PNS logo]]
+[[https://github.com/deloachcd/img/blob/master/MM-PNS-logo.png?raw=true]]
 
 * My Musical P-NAS (MM-PNS)
 My Musical P-NAS is my personal solution for hosting a NAS that also streams music on a
