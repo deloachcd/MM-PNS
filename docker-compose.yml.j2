@@ -1,0 +1,45 @@
+version: "3"
+services:
+  reverseproxy:
+    image: nginx
+    restart: always
+    volumes:
+      - ./nginx:/etc/nginx
+    # TODO: reverse proxy with nginx
+    # TODO: SSL
+    
+  navidrome:
+    depends_on:
+      - reverseproxy
+    image: deluan/navidrome:latest
+    user: "{{ owner_uid }}:{{ owner_gid }}"  # TODO ensure owner owns volume in playbook
+    ports:
+      - "4533:4533"
+    environment:
+      # I went for a pretty minimal config setup here, but preferences might vary.
+      # Documentation for these config options is available here:
+      # https://www.navidrome.org/docs/usage/configuration-options/
+      ND_BASEURL: "/music"
+      ND_DEFAULTTHEME: "Light"
+      ND_LASTFM_ENABLED: "false"
+      ND_LISTENBRAINZ_ENABLED: "false"
+      ND_ENABLEEXTERNALSERVICES: "false"
+      ND_ENABLEFAVOURITES: "false"
+      ND_ENABLESTARRATING: "false"
+    volumes:
+      - "{{ navidrome_music_path }}:/music:ro"
+    restart: always
+
+  filebrowser:
+    depends_on:
+      - reverseproxy
+    image: filebrowser/filebrowser:latest
+    restart: always
+    # TODO: filebrowser configuration
+
+  samba:
+    image: dperson/samba
+    ports:
+      - 139:139
+      - 445:445
+    # TODO: linux user creds to samba user
