@@ -1,3 +1,4 @@
+# -*- mode: yaml; -*- 
 version: "3"
 services:
   reverseproxy:
@@ -34,8 +35,14 @@ services:
     depends_on:
       - reverseproxy
     image: filebrowser/filebrowser:latest
+    user: "{{ owner_uid }}:{{ owner_gid }}"  # TODO ensure owner owns volume in playbook
+    volumes:
+      - "{{ share_drive_path }}:/srv"
+      - "./PNS_data/filebrowser/filebrowser.db:/database.db"  # TODO ensure file exists in playbook
+      - "./PNS_data/filebrowser/.filebrowser.json:/.filebrowser.json"
+    ports:
+      - "8080:8080"
     restart: always
-    # TODO: filebrowser configuration
 
   samba:
     image: dperson/samba
