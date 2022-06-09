@@ -3,7 +3,16 @@
 * My Musical P-NAS (MM-PNS)
 My Musical P-NAS is my personal solution for hosting a NAS that also streams music on a
 Raspberry Pi. Setup is largely automated through Ansible, and services are deployed within
-a set of containers which can be easily spun up and down with ~docker-compose.~
+a set of containers which can be easily spun up and down with ~docker-compose~.
 
-** Wait, none of that is true yet!?!?!?1
-Because this README was written for the first commit on this repo, dummy.
+** Requirements
+- A raspberry pi with reasonable specs running raspbian
+- A valid SSL cert for the HTTPS reverse proxied services
+- A working SSH connection to the raspberry pi with public key authentication
+- Ansible on the machine the provisioning playbooks will be run from
+  
+** Feature Roadmap
+- [ ] Automated firewall provisioning for public-facing web service, LAN-only samba and SSH services
+- [ ] Automated setup of containerized [[https://www.navidrome.org/][Navidrome]] service behind HTTPS reverse proxy
+- [ ] Automated setup of containerized [[https://github.com/filebrowser/filebrowser][filebrowser]] service behind HTTPS reverse proxy
+- [ ] Automated setup of containerized samba service
