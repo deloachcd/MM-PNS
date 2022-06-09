@@ -1,5 +1,0 @@
-vars:
-  router_ip: 192.168.1.1
-  volume_owner: cdeloach
-  share_drive_path: "/media/raid/{{ volume_owner }}"
-  navidrome_music_path: "{{ share_drive_path }}/Music"
