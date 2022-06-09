@@ -3,11 +3,11 @@ version: "3"
 services:
   reverseproxy:
     image: nginx
-    restart: always
     volumes:
       - nginx/nginx.conf:/etc/nginx/nginx.conf
       - nginx/conf.d/:/etc/nginx/conf.d
       - nginx/ssl/:/etc/nginx/ssl
+    restart: always
     
   navidrome:
     depends_on:
@@ -31,18 +31,18 @@ services:
       - "{{ navidrome_music_path }}:/music:ro"
     restart: always
 
-  filebrowser:
-    depends_on:
-      - reverseproxy
-    image: filebrowser/filebrowser:latest
-    user: "{{ owner_uid }}:{{ owner_gid }}"  # TODO ensure owner owns volume in playbook
-    volumes:
-      - "{{ share_drive_path }}:/srv"
-      - "./PNS_data/filebrowser/filebrowser.db:/database.db"  # TODO ensure file exists in playbook
-      - "./PNS_data/filebrowser/.filebrowser.json:/.filebrowser.json"
-    ports:
-      - "8080:8080"
-    restart: always
+  #filebrowser:
+  #  depends_on:
+  #    - reverseproxy
+  #  image: filebrowser/filebrowser:latest
+  #  user: "{{ owner_uid }}:{{ owner_gid }}"  # TODO ensure owner owns volume in playbook
+  #  volumes:
+  #    - "{{ share_drive_path }}:/srv"
+  #    - "./PNS_data/filebrowser/filebrowser.db:/database.db"  # TODO ensure file exists in playbook
+  #    - "./PNS_data/filebrowser/.filebrowser.json:/.filebrowser.json"
+  #  ports:
+  #    - "8080:8080"
+  #  restart: always
 
   #samba:
   #  image: dperson/samba
