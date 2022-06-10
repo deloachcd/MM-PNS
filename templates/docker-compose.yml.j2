@@ -13,7 +13,7 @@ services:
     depends_on:
       - reverseproxy
     image: deluan/navidrome:latest
-    user: "{{ pnas_user_uid }}:{{ pnas_user_gid }}"  # TODO ensure owner owns volume in playbook
+    user: "{{ user_uid.stdout }}:{{ user_gid.stdout }}"
     ports:
       - "4533:4533"
     environment:
@@ -35,9 +35,9 @@ services:
   #  depends_on:
   #    - reverseproxy
   #  image: filebrowser/filebrowser:latest
-  #  user: "{{ owner_uid }}:{{ owner_gid }}"  # TODO ensure owner owns volume in playbook
+  #  user: "{{ owner_uid }}:{{ owner_gid }}"
   #  volumes:
-  #    - "{{ share_drive_path }}:/srv"
+  #    - "{{ pnas_share_path }}:/srv"
   #    - "./PNS_data/filebrowser/filebrowser.db:/database.db"  # TODO ensure file exists in playbook
   #    - "./PNS_data/filebrowser/.filebrowser.json:/.filebrowser.json"
   #  ports:
@@ -51,5 +51,5 @@ services:
   #    - 445:445
   #  volumes:
   #    - "{{ share_drive_path }}:/mnt"
-  #  command: "{{ samba_users_cmd }}"
+  #  command: "{{ samba_users_cmd }}"  # TODO determine this now that it's simpler
   #  restart: unless-stopped

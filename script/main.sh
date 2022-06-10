@@ -26,6 +26,7 @@ ${pnas_host}
 
 [pnas_host:vars]
 ansible_ssh_user=${pnas_user}
+pnas_user=${pnas_user}
 pnas_router_ip=${pnas_router_ip}
 pnas_share_path=${pnas_share_path}
 pnas_music_path=${pnas_music_path}
@@ -33,4 +34,16 @@ pnas_samba_user=${pnas_samba_user}
 pnas_samba_user_passwd=${pnas_samba_user_passwd}
 EOF
 
-ansible-playbook -i ansible/inventory.ini ansible/provision.yml
+# create generic symlinks to actual certs in nginx
+if [[ -e nginx/ssl/${pnas_host}.crt ]]; then
+    cd nginx/ssl
+    ln -s ${pnas_host}.crt live.crt
+    cd ../..
+fi
+if [[ -e nginx/certs/${pnas_host}.key ]]; then
+    cd nginx/ssl
+    ln -s ${pnas_host}.key live.key
+    cd ../..
+fi
+
+#ansible-playbook -i ansible/inventory.ini ansible/provision.yml

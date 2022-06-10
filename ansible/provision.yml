@@ -1,5 +1,5 @@
-hosts: pnas_host
-roles:
-  - firewall
-  - docker
-  - pnas_provision
+- hosts: pnas_host
+  roles:
+    - firewall
+    - docker
+    - pnas_provision

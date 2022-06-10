@@ -1,0 +1,43 @@
+- name: Get UID of our user
+  command: "id -u"
+  register: user_uid
+
+- name: Get GID of our user
+  command: "id -u"
+  register: user_uid
+
+- name: Ensure our user owns the samba share
+  file:
+    path: "{{ pnas_share_path }}"
+    owner: "{{ pnas_user }}"
+
+- name: Ensure our user owns the navidrome music library
+  file:
+    path: "{{ pnas_share_path }}"
+    owner: "{{ pnas_user }}"
+
+- name: Ensure our user can manage docker containers
+  user:
+    name: "{{ pnas_user }}"
+    append: yes
+    groups: docker
+  become: yes
+
+- name: Ensure we have a directory for MM-PNAS on the host
+  file:
+    path: MM-PNS
+    state: directory
+
+- name: Copy over SSL certs and config files for nginx
+  copy:
+    src: nginx
+    dest: MM-PNS/nginx
+
+- name: Create populated docker-compose.yml file for service initialization
+  template:
+    src: templates/docker-compose.yml.j2
+    dest: MM-PNS/docker-compose.yml
+
+- name: Bring up our containerized services
+  community.docker.docker_compose:
+    project_src: MM-PNS
