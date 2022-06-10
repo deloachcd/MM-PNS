@@ -13,7 +13,7 @@ services:
     depends_on:
       - reverseproxy
     image: deluan/navidrome:latest
-    user: "{{ owner_uid }}:{{ owner_gid }}"  # TODO ensure owner owns volume in playbook
+    user: "{{ pnas_user_uid }}:{{ pnas_user_gid }}"  # TODO ensure owner owns volume in playbook
     ports:
       - "4533:4533"
     environment:
@@ -28,7 +28,7 @@ services:
       ND_ENABLEFAVOURITES: "false"
       ND_ENABLESTARRATING: "false"
     volumes:
-      - "{{ navidrome_music_path }}:/music:ro"
+      - "{{ pnas_music_path }}:/music:ro"
     restart: always
 
   #filebrowser:

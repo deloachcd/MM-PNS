@@ -1,4 +1,4 @@
-hosts: "{{ pnas_host }}"
+hosts: pnas_host
 roles:
   - firewall
   - docker

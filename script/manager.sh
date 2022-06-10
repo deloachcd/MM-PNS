@@ -2,7 +2,7 @@
 
 ACTION="$1"
 if [[ -z "$ACTION" || "$ACTION" == "-h" || "$ACTION" =~ "help" ]]; then
-    echo "Usage: ./$(basename $0) {create|edit|status}"
+    echo "Usage: ./$(basename $0) {create|edit|view|status}"
     if [[ -z "$ACTION" ]]; then
         exit -1
     else
@@ -10,7 +10,7 @@ if [[ -z "$ACTION" || "$ACTION" == "-h" || "$ACTION" =~ "help" ]]; then
     fi
 fi
 
-PNASFILE=vault/PNASfile.yml
+PNASFILE=vault/PNASfile.ini
 PASSFILE=vault/.passfile
 if [[ $ACTION == "create" ]]; then
     if [[ ! -e $PNASFILE ]]; then
@@ -30,13 +30,15 @@ if [[ $ACTION == "create" ]]; then
         done
         echo "$PASSWD" > $PASSFILE
         chmod 600 $PASSFILE
-        cp templates/PNASfile.yml $PNASFILE
+        cp templates/PNASfile.ini $PNASFILE
         ansible-vault encrypt --vault-password-file $PASSFILE $PNASFILE
     else
         echo "Nothing to do! (encrypted file already exists)"
     fi
 elif [[ $ACTION == "edit" ]]; then
     ansible-vault edit --vault-password-file $PASSFILE $PNASFILE
+elif [[ $ACTION == "view" ]]; then
+    ansible-vault view --vault-password-file $PASSFILE $PNASFILE
 elif [[ $ACTION == "status" ]]; then
     if [[ -e $PNASFILE ]]; then
         echo "Vaulted PNASfile appears to be present."
