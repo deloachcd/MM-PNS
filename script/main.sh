@@ -1,21 +1,26 @@
 #!/bin/bash
+set -euo pipefail
 
-# NOTE once everything is stablized and tested, I can cut all of this out
-# and just have the user write directly to ./config/PNASfile.ini since they
-# don't have to worry about committing passwords to the repo
-if [[ ! -e vault/PNASfile.ini  ]]; then
-    ./script/manager.sh create
-    echo "You will now be taken to a text editor to set variables for deployment"
-    echo "[Press any key to continue]"
-    read -n 1
-    ./script/manager.sh edit
+if [[ ! -e config/PNASfile ]]; then
+    echo "Error: you need to set deployment variables in a live PNASfile first."
+    echo "You can start by copying over the self-documenting template:"
+    echo "cp templates/PNASfile config/PNASfile"
+    echo
+    echo "Refer to README.org for more information."
+    exit -1
 fi
 
 while read variable_declaration; do
+    VARNAME=$(echo "$variable_declaration" | awk -F '=' '{ print $1 }')
     eval "$variable_declaration"
-done < <(./script/manager.sh view)
+    if [[ -z "${!VARNAME}" ]]; then
+        echo "Error: required variable '$VARNAME' is unset in PNASfile!"
+        echo "Correct this and try again."
+        exit -1
+    fi
+done < <(cat config/PNASfile)
 
-cat << EOF
+cat > ansible/inventory.ini << EOF
 [pnas_host]
 ${pnas_host}
 
@@ -27,3 +32,5 @@ pnas_music_path=${pnas_music_path}
 pnas_samba_user=${pnas_samba_user}
 pnas_samba_user_passwd=${pnas_samba_user_passwd}
 EOF
+
+ansible-playbook -i ansible/inventory.ini ansible/provision.yml
