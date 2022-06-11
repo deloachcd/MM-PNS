@@ -4,14 +4,15 @@
 # dynamically with eval, so they can reference each other through shell variable
 # syntax (as long as they aren't referred to out of order).
 #
-# Also, note that if you're writing samba_user_password directly to this file,
-# you should probably at least do a 'chmod 600' on it.
+# Note that if you're writing the samba user password in plaintext, this file
+# should obviously be treated with care. Don't send it to any Nigerian princes.
 
 # Hostname of the server to deploy MM-PNS on.
 pnas_host=
 
 # Username of the user which MM-PNS will run as.
-# Probably needs to be able to escalate to root.
+# Needs to be able to escalate privileges via sudo, and connect to the pi server
+# via SSH public key authentication.
 pnas_user=
 
 # IP address of the router the server accesses the public internet through.
