@@ -19,6 +19,9 @@ if [[ ! -e config/PNASfile ]]; then
 fi
 
 while read variable_declaration; do
+    if echo "$variable_declaration" | grep '^#' 1>/dev/null; then
+        continue
+    fi
     VARNAME=$(echo "$variable_declaration" | awk -F '=' '{ print $1 }')
     eval "$variable_declaration"
     if [[ -z "${!VARNAME}" ]]; then
@@ -26,13 +29,14 @@ while read variable_declaration; do
         echo "Correct this and try again."
         exit -1
     fi
-done < <(cat config/PNASfile)
+done < <(cat config/PNASfile | grep -v '^#' | grep '[a-z]')
 
 cat > ansible/inventory.ini << EOF
 [pnas_host]
 ${pnas_host}
 
 [pnas_host:vars]
+ansible_python_interpreter=/usr/bin/python3
 ansible_ssh_user=${pnas_user}
 pnas_user=${pnas_user}
 pnas_router_ip=${pnas_router_ip}

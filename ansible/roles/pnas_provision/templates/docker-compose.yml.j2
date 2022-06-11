@@ -1,0 +1,53 @@
+# -*- mode: yaml; -*- 
+version: "3"
+services:
+  reverseproxy:
+    image: nginx
+    volumes:
+      - ./nginx:/etc/nginx
+    restart: always
+    
+  navidrome:
+    depends_on:
+      - reverseproxy
+    image: deluan/navidrome:latest
+    user: "{{ user_uid.stdout }}:{{ user_gid.stdout }}"
+    ports:
+      - "4533:4533"
+    environment:
+      # I went for a pretty minimal config setup here, but preferences might vary.
+      # Documentation for these config options is available here:
+      # https://www.navidrome.org/docs/usage/configuration-options/
+      ND_BASEURL: "/music"
+      ND_DEFAULTTHEME: "Light"
+      ND_LASTFM_ENABLED: "false"
+      ND_LISTENBRAINZ_ENABLED: "false"
+      ND_ENABLEEXTERNALSERVICES: "false"
+      ND_ENABLEFAVOURITES: "false"
+      ND_ENABLESTARRATING: "false"
+    volumes:
+      - "{{ pnas_music_path }}:/music:ro"
+    restart: always
+
+  #filebrowser:
+  #  depends_on:
+  #    - reverseproxy
+  #  image: filebrowser/filebrowser:latest
+  #  user: "{{ user_uid }}:{{ user_gid }}"
+  #  volumes:
+  #    - "{{ pnas_share_path }}:/srv"
+  #    - "./PNS_data/filebrowser/filebrowser.db:/database.db"  # TODO ensure file exists in playbook
+  #    - "./PNS_data/filebrowser/.filebrowser.json:/.filebrowser.json"
+  #  ports:
+  #    - "8080:8080"
+  #  restart: always
+
+  #samba:
+  #  image: dperson/samba
+  #  ports:
+  #    - 139:139
+  #    - 445:445
+  #  volumes:
+  #    - "{{ pnas_share_path }}:/mnt"
+  #  command: ""  # TODO determine this now that it's simpler
+  #  restart: unless-stopped

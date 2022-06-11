@@ -9,7 +9,7 @@ a set of containers which can be easily spun up and down with ~docker-compose~.
 - A raspberry pi with reasonable specs running raspbian
 - A valid SSL cert for the HTTPS reverse proxied services
 - A working SSH connection to the raspberry pi with public key authentication
-- Ansible on the machine the provisioning playbooks will be run from
+- Ansible on the machine the provisioning playbooks will be run from, with the ~docker~ module
   
 ** Feature Roadmap
 - [ ] Automated firewall provisioning for public-facing web service, LAN-only samba and SSH services
@@ -18,11 +18,11 @@ a set of containers which can be easily spun up and down with ~docker-compose~.
 - [ ] Automated setup of containerized samba service
 
 ** Setup
-- Ensure that you have Ansible installed on the machine you're going to run the automation
+- Ensure that you have Ansible installed with the docker module on the machine you're going to run the automation
   from, and on your user's ~$PATH~. For example, for an install via ~pip~:
   #+begin_src sh
 # pip installs user packages into ~/.local/bin on Linux, and ~/Library/Python/$version/bin on macOS
-python3 -m pip install --user ansible
+python3 -m pip install --user ansible docker
 # 'which' should return the user-installed package location
 which ansible 
   #+end_src

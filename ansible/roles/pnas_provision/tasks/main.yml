@@ -4,7 +4,7 @@
 
 - name: Get GID of our user
   command: "id -u"
-  register: user_uid
+  register: user_gid
 
 - name: Ensure our user owns the samba share
   file:
@@ -38,6 +38,20 @@
     src: templates/docker-compose.yml.j2
     dest: MM-PNS/docker-compose.yml
 
+- name: Ensure we have python3-pip
+  apt:
+    name: python3-pip
+    state: present
+  become: yes
+
+- name: Ensure we have the python packages for ansible to manage docker-compose
+  pip:
+    name: "{{ item }}"
+  loop:
+    - docker
+    - docker-compose
+
+# TODO: fix timeout problem
 - name: Bring up our containerized services
   community.docker.docker_compose:
     project_src: MM-PNS
