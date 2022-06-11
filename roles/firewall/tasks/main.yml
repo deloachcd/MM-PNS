@@ -14,13 +14,14 @@
     rule: allow
     port: 443
 
-- name: Allow connections to SSH and samba ports from LAN IP addresses
+- name: Allow connections to port 80, SSH and samba ports from LAN
   community.general.ufw:
     rule: allow
     port: "{{ item }}"
     from: "{{ router_ip }}/24"
   loop:
     - 22
+    - 80
     - 139
     - 445
 
