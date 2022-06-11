@@ -27,6 +27,15 @@
         - 139
         - 445
 
+    - name: Allow self to bind to container service ports
+      community.general.ufw:
+        rule: allow
+        port: "{{ item }}"
+        from: "127.0.0.1"
+      loop:
+        - 4533
+        - 8080
+
     - name: Enable the firewall
       community.general.ufw:
         state: enabled

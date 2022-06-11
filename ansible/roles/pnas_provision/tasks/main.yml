@@ -31,27 +31,19 @@
 - name: Copy over SSL certs and config files for nginx
   copy:
     src: nginx
-    dest: MM-PNS/nginx
+    dest: MM-PNS
+
+- name: Ensure we have a directory for Navidrome data on the host
+  file:
+    path: MM-PNS/navidrome_data
+    state: directory
+
+- name: Copy over Navidrome config
+  copy:
+    src: navidrome.toml
+    dest: MM-PNS/navidrome_data/config.toml
 
 - name: Create populated docker-compose.yml file for service initialization
   template:
     src: templates/docker-compose.yml.j2
     dest: MM-PNS/docker-compose.yml
-
-- name: Ensure we have python3-pip
-  apt:
-    name: python3-pip
-    state: present
-  become: yes
-
-- name: Ensure we have the python packages for ansible to manage docker-compose
-  pip:
-    name: "{{ item }}"
-  loop:
-    - docker
-    - docker-compose
-
-# TODO: fix timeout problem
-- name: Bring up our containerized services
-  community.docker.docker_compose:
-    project_src: MM-PNS

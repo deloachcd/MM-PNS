@@ -12,10 +12,11 @@ a set of containers which can be easily spun up and down with ~docker-compose~.
 - Ansible on the machine the provisioning playbooks will be run from, with the ~docker~ module
   
 ** Feature Roadmap
-- [ ] Automated firewall provisioning for public-facing web service, LAN-only samba and SSH services
-- [ ] Automated setup of containerized [[https://www.navidrome.org/][Navidrome]] service behind HTTPS reverse proxy
-- [ ] Automated setup of containerized [[https://github.com/filebrowser/filebrowser][filebrowser]] service behind HTTPS reverse proxy
+- [X] Automated firewall provisioning for public-facing web service, LAN-only samba and SSH services
+- [X] Automated provisioning of containerized [[https://www.navidrome.org/][Navidrome]] service
+- [ ] Automated setup of containerized [[https://github.com/filebrowser/filebrowser][filebrowser]] service
 - [ ] Automated setup of containerized samba service
+- [ ] filebrowser and navidrome services behind HTTPS reverse proxy with nginx
 
 ** Setup
 - Ensure that you have Ansible installed with the docker module on the machine you're going to run the automation
@@ -34,9 +35,7 @@ which ansible
 - The SSL cert files need to be put in place for the nginx proxied services.
   You can place them as ~live.crt~ and ~live.key~ in ~nginx/ssl~, or place them there as
   ~${pnas_host}.crt~ and ~${pnas_host}.key~. (~live.crt~ and ~live.key~ will be created as symlinks to these).
-- The services can now be provisioned and deployed end-to-end via the wrapper script:
+- The services can now be provisioned on the remote server via the wrapper script:
   #+begin_src sh
 ./script/deploy.sh 
   #+end_src
-
-

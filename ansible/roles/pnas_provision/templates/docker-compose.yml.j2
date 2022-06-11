@@ -1,15 +1,15 @@
 # -*- mode: yaml; -*- 
 version: "3"
 services:
-  reverseproxy:
-    image: nginx
-    volumes:
-      - ./nginx:/etc/nginx
-    restart: always
+  #reverseproxy:
+  #  image: nginx
+  #  volumes:
+  #    - ./nginx:/etc/nginx
+  #  restart: always
+  #  depends_on:
+  #    - navidrome
     
   navidrome:
-    depends_on:
-      - reverseproxy
     image: deluan/navidrome:latest
     user: "{{ user_uid.stdout }}:{{ user_gid.stdout }}"
     ports:
@@ -18,14 +18,9 @@ services:
       # I went for a pretty minimal config setup here, but preferences might vary.
       # Documentation for these config options is available here:
       # https://www.navidrome.org/docs/usage/configuration-options/
-      ND_BASEURL: "/music"
-      ND_DEFAULTTHEME: "Light"
-      ND_LASTFM_ENABLED: "false"
-      ND_LISTENBRAINZ_ENABLED: "false"
-      ND_ENABLEEXTERNALSERVICES: "false"
-      ND_ENABLEFAVOURITES: "false"
-      ND_ENABLESTARRATING: "false"
+      ND_CONFIGFILE: "/data/config.toml"
     volumes:
+      - "./navidrome_data:/data"
       - "{{ pnas_music_path }}:/music:ro"
     restart: always
 
