@@ -14,8 +14,8 @@ a set of containers which can be easily spun up and down with ~docker-compose~.
 ** Feature Roadmap
 - [X] Automated firewall provisioning for public-facing web service, LAN-only samba and SSH services
 - [X] Automated provisioning of containerized [[https://www.navidrome.org/][Navidrome]] service
-- [ ] Automated setup of containerized [[https://github.com/filebrowser/filebrowser][filebrowser]] service
-- [ ] Automated setup of containerized samba service
+- [X] Automated provisioning of containerized [[https://github.com/filebrowser/filebrowser][filebrowser]] service
+- [X] Automated provisioning of containerized samba service
 - [ ] filebrowser and navidrome services behind HTTPS reverse proxy with nginx
 
 ** Setup

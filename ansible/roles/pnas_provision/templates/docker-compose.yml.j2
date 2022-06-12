@@ -8,6 +8,7 @@ services:
   #  restart: always
   #  depends_on:
   #    - navidrome
+  #    - filebrowser
     
   navidrome:
     image: deluan/navidrome:latest
@@ -20,29 +21,31 @@ services:
       # https://www.navidrome.org/docs/usage/configuration-options/
       ND_CONFIGFILE: "/data/config.toml"
     volumes:
-      - "./navidrome_data:/data"
+      - "./data/navidrome:/data"
       - "{{ pnas_music_path }}:/music:ro"
     restart: always
 
-  #filebrowser:
-  #  depends_on:
-  #    - reverseproxy
-  #  image: filebrowser/filebrowser:latest
-  #  user: "{{ user_uid }}:{{ user_gid }}"
-  #  volumes:
-  #    - "{{ pnas_share_path }}:/srv"
-  #    - "./PNS_data/filebrowser/filebrowser.db:/database.db"  # TODO ensure file exists in playbook
-  #    - "./PNS_data/filebrowser/.filebrowser.json:/.filebrowser.json"
-  #  ports:
-  #    - "8080:8080"
-  #  restart: always
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    user: "{{ user_uid.stdout }}:{{ user_gid.stdout }}"
+    volumes:
+      - "{{ pnas_share_path }}:/srv"
+      - "./data/filebrowser/database.db:/database.db"
+      - "./data/filebrowser/filebrowser.json:/.filebrowser.json"
+    ports:
+      - "8080:8080"
+    restart: always
 
-  #samba:
-  #  image: dperson/samba
-  #  ports:
-  #    - 139:139
-  #    - 445:445
-  #  volumes:
-  #    - "{{ pnas_share_path }}:/mnt"
-  #  command: ""  # TODO determine this now that it's simpler
-  #  restart: unless-stopped
+  samba:
+    image: dperson/samba
+    ports:
+      - 139:139
+      - 445:445
+    volumes:
+      - "{{ pnas_share_path }}:/pnas"
+    # TODO User writes out the samba command in PNASfile
+    command: >
+      -u '{{ pnas_samba_user }};{{ pnas_samba_user_passwd }}'
+      -s 'pnas_share;/pnas;yes;no;no;{{ pnas_samba_user }}'
+      -p
+    restart: unless-stopped
