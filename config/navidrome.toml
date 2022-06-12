@@ -1,1 +1,1 @@
-ansible/roles/pnas_provision/files/navidrome.toml
+../ansible/roles/pnas_provision/files/navidrome.toml
