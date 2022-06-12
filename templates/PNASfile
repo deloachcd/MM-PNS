@@ -28,3 +28,6 @@ pnas_music_path=
 # Username and password for the samba user.
 pnas_samba_user=${pnas_user}
 pnas_samba_user_passwd=
+
+# TODO Document this properly
+pnas_samba_share_config="pnas_share;/pnas;yes;no;no;${pnas_samba_user}"

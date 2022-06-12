@@ -1,0 +1,20 @@
+server {
+  listen 80;
+  server_name {{ pnas_host }};
+
+  proxy_set_header Host $host;
+  proxy_set_header X-Real-IP $remote_addr;
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header X-Forwarded-Proto $scheme;
+  proxy_set_header X-Forwarded-Protocol $scheme;
+  proxy_set_header X-Forwarded-Host $http_host;
+  proxy_buffering off;
+
+  location / {
+    proxy_pass http://{{ pnas_host }}:4533/;
+  }
+
+  location /drive/ {
+    proxy_pass http://{{ pnas_host }}:8080/;
+  }
+}

@@ -1,14 +1,18 @@
 # -*- mode: yaml; -*- 
 version: "3"
 services:
-  #reverseproxy:
-  #  image: nginx
-  #  volumes:
-  #    - ./nginx:/etc/nginx
-  #  restart: always
-  #  depends_on:
-  #    - navidrome
-  #    - filebrowser
+  reverseproxy:
+    image: nginx
+    volumes:
+      - ./nginx/ssl:/etc/nginx/ssl
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/services.conf
+    ports:
+      - 80:80
+      - 443:443
+    restart: always
+    depends_on:
+      - navidrome
+      - filebrowser
     
   navidrome:
     image: deluan/navidrome:latest
@@ -43,7 +47,6 @@ services:
       - 445:445
     volumes:
       - "{{ pnas_share_path }}:/pnas"
-    # TODO User writes out the samba command in PNASfile
     command: >
       -u '{{ pnas_samba_user }};{{ pnas_samba_user_passwd }}'
       -s 'pnas_share;/pnas;yes;no;no;{{ pnas_samba_user }}'

@@ -10,6 +10,8 @@
   file:
     path: "{{ pnas_share_path }}"
     owner: "{{ pnas_user }}"
+    recurse: yes
+  become: yes
 
 - name: Ensure our user owns the navidrome music library
   file:
@@ -48,10 +50,25 @@
     src: filebrowser.json
     dest: MM-PNS/data/filebrowser/filebrowser.json
 
+- name: Ensure we have a directory for nginx config on the host
+  file:
+    path: MM-PNS/nginx
+    state: directory
+
+- name: Copy over SSL certs
+  copy:
+    src: ssl
+    dest: MM-PNS/nginx
+
 - name: Copy over SSL certs and config files for nginx
   copy:
     src: nginx
     dest: MM-PNS
+
+- name: Create populated nginx config file on the host
+  template:
+    src: templates/nginx.conf.j2
+    dest: MM-PNS/nginx/nginx.conf
 
 - name: Create populated docker-compose.yml file for service initialization
   template:

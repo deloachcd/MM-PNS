@@ -16,6 +16,7 @@ a set of containers which can be easily spun up and down with ~docker-compose~.
 - [X] Automated provisioning of containerized [[https://www.navidrome.org/][Navidrome]] service
 - [X] Automated provisioning of containerized [[https://github.com/filebrowser/filebrowser][filebrowser]] service
 - [X] Automated provisioning of containerized samba service
+- [X] filebrowser and navidrome services behind reverse proxy with nginx
 - [ ] filebrowser and navidrome services behind HTTPS reverse proxy with nginx
 - [ ] convenience script that spins up services inside a tmux session on the server
 
