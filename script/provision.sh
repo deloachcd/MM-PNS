@@ -22,9 +22,6 @@ if [[ ! -e config/PNASfile ]]; then
 fi
 
 while read variable_declaration; do
-    if echo "$variable_declaration" | grep '^#' 1>/dev/null; then
-        continue
-    fi
     VARNAME=$(echo "$variable_declaration" | awk -F '=' '{ print $1 }')
     eval "$variable_declaration"
     if [[ -z "${!VARNAME}" ]]; then
