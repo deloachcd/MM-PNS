@@ -49,6 +49,6 @@ services:
       - "{{ pnas_share_path }}:/pnas"
     command: >
       -u '{{ pnas_samba_user }};{{ pnas_samba_user_passwd }}'
-      -s 'pnas_share;/pnas;yes;no;no;{{ pnas_samba_user }}'
+      -s '{{ pnas_samba_share_config }}'
       -p
     restart: unless-stopped

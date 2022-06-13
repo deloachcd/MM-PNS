@@ -5,6 +5,9 @@ cleanup() {
     if [[ -e ansible/inventory.ini ]]; then
         rm ansible/inventory.ini
     fi
+    if [[ -e ansible/inventory_vars ]]; then
+        rm ansible/inventory_vars
+    fi
 }
 
 trap cleanup EXIT
@@ -29,6 +32,7 @@ while read variable_declaration; do
         echo "Correct this and try again."
         exit -1
     fi
+    echo "${VARNAME}=${!VARNAME}" >> ansible/inventory_vars
 done < <(cat config/PNASfile | grep -v '^#' | grep '[a-z]')
 
 cat > ansible/inventory.ini << EOF
@@ -36,16 +40,11 @@ cat > ansible/inventory.ini << EOF
 ${pnas_host}
 
 [pnas_host:vars]
-ansible_python_interpreter=/usr/bin/python3
 ansible_ssh_user=${pnas_user}
-pnas_user=${pnas_user}
-pnas_router_ip=${pnas_router_ip}
-pnas_share_path=${pnas_share_path}
-pnas_music_path=${pnas_music_path}
-pnas_samba_user=${pnas_samba_user}
-pnas_samba_user_passwd=${pnas_samba_user_passwd}
+$(cat ansible/inventory_vars)
 EOF
 chmod 600 ansible/inventory.ini
+rm ansible/inventory_vars
 
 # create generic symlinks to actual certs in nginx
 if [[ -e nginx/ssl/${pnas_host}.crt && ! -e nginx/ssl/live.crt ]]; then
