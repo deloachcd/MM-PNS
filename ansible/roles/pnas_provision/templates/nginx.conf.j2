@@ -11,10 +11,10 @@ server {
   proxy_buffering off;
 
   location / {
-    proxy_pass http://{{ pnas_host }}:4533/;
+    proxy_pass http://localhost:4533/;
   }
 
   location /drive/ {
-    proxy_pass http://{{ pnas_host }}:8080/;
+    proxy_pass http://localhost:8080/;
   }
 }

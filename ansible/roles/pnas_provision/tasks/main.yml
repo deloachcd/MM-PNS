@@ -60,10 +60,11 @@
     src: ssl
     dest: MM-PNS/nginx
 
-- name: Copy over SSL certs and config files for nginx
+- name: Copy over launcher script
   copy:
-    src: nginx
-    dest: MM-PNS
+    src: launcher.sh
+    dest: MM-PNS/launcher.sh
+    mode: u+x
 
 - name: Create populated nginx config file on the host
   template:
